@@ -42,6 +42,37 @@ data.dicuf = read.csv("Aligned/DiCuF-Wtd-TimeWise-MA-aligned.csv",header=TRUE,as
 data.avon = read.csv("Aligned/AvoN-Wtd-TimeWise-MA-aligned.csv",header=TRUE,as.is=TRUE)
 data.obs = read.csv("Aligned/obs-Wtd-TimeWise-MA-aligned.csv",header=TRUE,as.is=TRUE)  
 
+# errors
+nzRows = apply(data.obs[,4:19], 1, function(x) any(x ==0 ))
+indices = which(nzRows == 0)  
+
+# calculate mape
+ape = abs(data.dicuf[indices,6:21] - data.obs[indices,4:19])/data.obs[indices,4:19]
+mape = apply(ape,1,mean)  
+myDF = data.frame(MAPE = mape,
+                  Date = as.Date(data.dicuf$Date[indices], "%m/%d/%y"))
+p1 = ggplot(myDF,aes(Date,MAPE)) +  
+  geom_point() +
+  labs(y = "MAPE")
+
+p2 = p1 + stat_smooth(method="lm") +
+  scale_y_continuous(limits = c(0,1),
+                     breaks = seq(0.1,1.0,0.1)) +
+  scale_x_date(breaks = "1 month", minor_breaks = "1 week", 
+               labels=date_format("%m-%Y")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text = element_text(size = rel(1.3), colour = "black"),
+        axis.title = element_text(size = rel(1.3), colour = "black"))
+
+nMonths = month(as.Date(data.dicuf$Date[indices], "%m/%d/%y"))
+if(length(unique(nMonths))<2){
+  p2 = p2 + scale_x_date(labels=date_format("%d-%m-%Y"))        
+}
+
+
+
+  
+#--------------------
 #dicuf: error per <building, strategy>
 buildings = unique(data.dicuf$Building)
 for (i in 1:length(buildings)){
