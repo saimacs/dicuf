@@ -121,7 +121,7 @@ p2 = p1 +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         axis.text = element_text(size = rel(1.3), colour = "black"),
         axis.title = element_text(size = rel(1.3), colour = "black")) + 
-  guides(fill=guide_legend(ncol=2))
+  guides(color=guide_legend(ncol=2))
 
 nMonths = month(as.Date(data.dicuf$Date[indices], "%m/%d/%y"))
 if(length(unique(nMonths))<2){

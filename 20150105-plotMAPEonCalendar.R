@@ -6,13 +6,13 @@ library(plyr)
 library(scales)
 
 # read event data 
-data12 = read.csv("DRevents2012.csv")
-data13 = read.csv("DRevents2013.csv")
-data14 = read.csv("DRevents2014.csv")
-eventData = rbind(data12,data13,data14)
-events = count(eventData,"Date")
-dat = data.frame(date=as.Date(events$Date,format = "%m/%d/%Y"),
-                 freq=events$freq)
+setwd("/Users/saima/Desktop/Energy Experiments/gcode/")
+eventData = read.csv("dicuf/eventwiseMape.csv")
+#events = count(eventData,"Date")
+dat = data.frame(date=as.Date(eventData$Date,format = "%m/%d/%Y"),
+                 mape=eventData$MAPE)
+dat = data.frame(date=eventData$Date,
+                 mape=eventData$MAPE)
 
 dat$year = as.numeric(as.POSIXlt(dat$date)$year+1900)
 dat$month = as.numeric(as.POSIXlt(dat$date)$mon+1)
