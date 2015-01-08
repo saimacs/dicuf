@@ -49,8 +49,16 @@ indices = which(nzRows == 0)
 # calculate mape
 ape = abs(data.dicuf[indices,6:21] - data.obs[indices,4:19])/data.obs[indices,4:19]
 mape = apply(ape,1,mean)  
-myDF = data.frame(MAPE = mape,
-                  Date = as.Date(data.dicuf$Date[indices], "%m/%d/%y"))
+myDF = data.frame(Date = as.Date(data.dicuf$Date[indices], "%m/%d/%y"),
+                  Building = data.dicuf$Building[indices],
+                  Strategy = data.dicuf$Strategy[indices],
+                  MAPE = mape)
+
+# save event-wise mape info
+write.csv(myDF,"../gcode/dicuf/eventwiseMape.csv",row.names=FALSE)
+
+#------------------------
+# 1. plot event-wise (individually for buildings)
 p1 = ggplot(myDF,aes(Date,MAPE)) +  
   geom_point() +
   labs(y = "MAPE")
@@ -69,3 +77,53 @@ if(length(unique(nMonths))<2){
   p2 = p2 + scale_x_date(labels=date_format("%d-%m-%Y"))        
 }
 
+#------------------------
+# 2. plot event-wise average 
+eventsList = unique(myDF$Date)
+numEvents = length(eventsList)
+avgMape = numeric(numEvents)
+for (i in 1:numEvents){
+  data.slice = myDF[which(myDF$Date == eventsList[i]),]
+  avgMape[i] = mean(data.slice$MAPE) 
+}
+myDF2 = data.frame(Date = eventsList, MAPE = avgMape)
+  
+p1 = ggplot(myDF2,aes(Date,MAPE)) +  
+  geom_point() +
+  labs(y = "MAPE")
+
+p2 = p1 + stat_smooth(method="lm") +
+  scale_y_continuous(limits = c(0,0.7),
+                     breaks = seq(0.1,0.7,0.1)) +
+  scale_x_date(breaks = "1 month", minor_breaks = "1 week", 
+               labels=date_format("%m-%Y")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text = element_text(size = rel(1.3), colour = "black"),
+        axis.title = element_text(size = rel(1.3), colour = "black"))
+
+nMonths = month(as.Date(data.dicuf$Date[indices], "%m/%d/%y"))
+if(length(unique(nMonths))<2){
+  p2 = p2 + scale_x_date(labels=date_format("%d-%m-%Y"))        
+}
+
+#------------------------
+# 3. plot colored for event-strategy
+
+p1 = ggplot(myDF,aes(Date,MAPE,color = Building)) +  
+  geom_point() +
+  labs(y = "MAPE")
+
+p2 = p1 + 
+  scale_y_continuous(limits = c(0,1),
+                     breaks = seq(0.1,1.0,0.1)) +
+  scale_x_date(breaks = "1 month", minor_breaks = "1 week", 
+               labels=date_format("%m-%Y")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text = element_text(size = rel(1.3), colour = "black"),
+        axis.title = element_text(size = rel(1.3), colour = "black")) + 
+  guides(fill=guide_legend(ncol=2))
+
+nMonths = month(as.Date(data.dicuf$Date[indices], "%m/%d/%y"))
+if(length(unique(nMonths))<2){
+  p2 = p2 + scale_x_date(labels=date_format("%d-%m-%Y"))        
+}
