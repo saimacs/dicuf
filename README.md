@@ -8,6 +8,8 @@
 
 * Number of valid DR events: 79
 
+* Number of strategies: 7 (GTR, VFD, DUTY, GTR & VFD, GTR & DUTY, VFD & DUTY, GTR & VFD & DUTY)
+
 * Number of buildings involved in the DR experiments: 37
 
 * Time frame of the tests: Nov 2012 to Dec 2013.
