@@ -9,8 +9,8 @@ library(scales)
 setwd("/Users/saima/Desktop/Energy Experiments/gcode/")
 eventData = read.csv("dicuf/eventwiseMape.csv")
 #events = count(eventData,"Date")
-dat = data.frame(date=as.Date(eventData$Date,format = "%m/%d/%Y"),
-                 mape=eventData$MAPE)
+#dat = data.frame(date=as.Date(eventData$Date,format = "%m/%d/%Y"),
+#                 mape=eventData$MAPE)
 dat = data.frame(date=eventData$Date,
                  mape=eventData$MAPE)
 
