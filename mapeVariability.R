@@ -19,9 +19,9 @@ stdevSorted = sort(stdev,index.return = TRUE)
 sortedIndices = stdevSorted$ix 
 sortedBuilding = buildings[sortedIndices]
 
-SAL HAR SCX THH DRB BHE JKP LAW ASC TCC OHE JHH BRI KAP MHP
-SLH GFS WPH BKS SCB LVL STU EEB LRC ALM VKC SOS SWC HOH HSH
-MRF WAH SCE
+# SAL HAR SCX THH DRB BHE JKP LAW ASC TCC OHE JHH BRI KAP MHP
+# SLH GFS WPH BKS SCB LVL STU EEB LRC ALM VKC SOS SWC HOH HSH
+# MRF WAH SCE
 
 #--------
 #sorted by low mape
@@ -29,6 +29,6 @@ mapeSorted = sort(avgMape,index.return = TRUE)
 sortedIndices = mapeSorted$ix 
 sortedBuilding = buildings[sortedIndices]
 
-SAL HAR LAW TCC THH WPH ASC OHE MHP JKP DRB BHE JHH EEB SOS
-SCB KAP SLH GFS SWC BRI STU LVL BKS SCX HOH VKC ALM LRC MRF
-WAH HSH SCE
+# SAL HAR LAW TCC THH WPH ASC OHE MHP JKP DRB BHE JHH EEB SOS
+# SCB KAP SLH GFS SWC BRI STU LVL BKS SCX HOH VKC ALM LRC MRF
+# WAH HSH SCE
